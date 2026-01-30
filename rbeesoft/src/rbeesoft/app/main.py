@@ -2,8 +2,8 @@ import sys
 from PySide6 import QtWidgets, QtCore
 from rbeesoft.app.ui.rbeesoftmainwindow import RbeesoftMainWindow
 from rbeesoft.app.ui.widgets.pages.page import Page
-from rbeesoft.app.core.processes.process import Process
-from rbeesoft.app.core.processes.processrunner import ProcessRunner
+from rbeesoft.app.ui.processes.process import Process
+from rbeesoft.app.ui.processes.processrunner import ProcessRunner
 
 
 class MainWindow(RbeesoftMainWindow):

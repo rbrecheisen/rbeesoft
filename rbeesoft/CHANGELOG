@@ -1,3 +1,11 @@
-1.0.2
+2.0.2
+=====
+- Moved process handling to UI (uses PySide6)
+
+2.0.1
+=====
+- Added process handling
+
+2.0.0
 =====
 - First version

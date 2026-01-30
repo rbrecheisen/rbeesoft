@@ -1,5 +1,5 @@
 import time
-from rbeesoft.app.core.processes.process import Process
+from rbeesoft.app.ui.processes.process import Process
 
 
 class DummyProcess(Process):
