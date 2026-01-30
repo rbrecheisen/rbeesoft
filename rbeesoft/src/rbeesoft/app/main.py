@@ -2,6 +2,8 @@ import sys
 from PySide6 import QtWidgets, QtCore
 from rbeesoft.app.ui.rbeesoftmainwindow import RbeesoftMainWindow
 from rbeesoft.app.ui.widgets.pages.page import Page
+from rbeesoft.app.core.processes.process import Process
+from rbeesoft.app.core.processes.processrunner import ProcessRunner
 
 
 class MainWindow(RbeesoftMainWindow):
@@ -23,14 +25,21 @@ class HomePage(Page):
         super(HomePage, self).__init__('home', 'HomePage', settings)
         button = QtWidgets.QPushButton('Go to next page')
         button.clicked.connect(self.handle_button)
+        process_button = QtWidgets.QPushButton('Run process')
+        process_button.clicked.connect(self.handle_process_button)
+        self._process_runner = ProcessRunner()
         layout = QtWidgets.QVBoxLayout()
         layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignTop)
         layout.addWidget(QtWidgets.QLabel(self.title()))
         layout.addWidget(button)
+        layout.addWidget(process_button)
         self.setLayout(layout)
 
     def handle_button(self):
         self.switch_to_page('next')
+
+    def handle_process_button(self):
+        self._process_runner.start(ExampleProcess())
 
 
 class NextPage(Page):
@@ -46,6 +55,23 @@ class NextPage(Page):
 
     def handle_button(self):
         self.switch_to_page('home')
+
+
+class ExampleProcess(Process):
+    def __init__(self):
+        super(ExampleProcess, self).__init__()
+        self._n = 10
+
+    def execute(self):
+        import time
+        out = []
+        for i in range(self._n):
+            if self.is_canceled():
+                return out
+            time.sleep(0.25)
+            out.append(i)
+            self.progress.emit(int((i+1)/self._n*100))
+        return out
 
 
 def main():
