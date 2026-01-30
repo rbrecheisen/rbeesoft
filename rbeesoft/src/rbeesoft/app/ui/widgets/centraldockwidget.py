@@ -1,11 +1,10 @@
 from PySide6.QtWidgets import (
     QWidget,
-    QLabel,
     QVBoxLayout,
     QDockWidget,
-    QStackedWidget,
 )
 from rbeesoft.common.logmanager import LogManager
+from rbeesoft.app.ui.widgets.pages.pagerouter import PageRouter
 
 LOG = LogManager()
 
@@ -14,15 +13,14 @@ class CentralDockWidget(QDockWidget):
     def __init__(self, parent, settings):
         super(CentralDockWidget, self).__init__(parent)
         self._settings = settings
-        self._stacked_widget = None
-        self._pages = None
+        self._page_router = None
         self.init()
 
     # INITIALIZATION
 
     def init(self):
         layout = QVBoxLayout()
-        layout.addWidget(self.stacked_widget())
+        layout.addWidget(self.page_router())
         container = QWidget()
         container.setLayout(layout)
         self.setObjectName('centraldockwidget') # Needed for saving geometry/state
@@ -33,23 +31,21 @@ class CentralDockWidget(QDockWidget):
     def settings(self):
         return self._settings
     
-    def stacked_widget(self):
-        if not self._stacked_widget:
-            self._stacked_widget = QStackedWidget()
-        return self._stacked_widget
-    
-    def pages(self):
-        if not self._pages:
-            self._pages = {}
-        return self._pages
+    def page_router(self):
+        if not self._page_router:
+            self._page_router = PageRouter()
+        return self._page_router
     
     # HELPERS
 
-    def add_page(self, page, name):
-        self.pages()[name] = page
-        self.stacked_widget().addWidget(page)
+    def add_page(self, page, home_page=False):
+        page.page_changed.connect(self.handle_page_changed)
+        self.page_router().add_page(page, home_page)
 
-    def select_panel(self, name):
-        page = self.pages().get(name, None)
-        if page:
-            self.stacked_widget().setCurrentWidget(page)
+    def switch_to_page(self, name):
+        self.page_router().switch_to_page(name)
+
+    # EVENT HANDLERS
+
+    def handle_page_changed(self, name):
+        self.switch_to_page(name)

@@ -4,7 +4,6 @@ from PySide6.QtGui import QGuiApplication, QAction
 from rbeesoft.app.ui.settings import Settings
 from rbeesoft.app.ui.widgets.centraldockwidget import CentralDockWidget
 from rbeesoft.app.ui.widgets.logdockwidget import LogDockWidget
-from rbeesoft.app.ui.widgets.pages.page import Page
 from rbeesoft.common.logmanager import LogManager
 
 LOG = LogManager()
@@ -31,11 +30,11 @@ class RbeesoftMainWindow(QMainWindow):
         if self._app_icon:
             self.setWindowIcon(self._app_icon)
         self.load_geometry_and_state()
-        self.init_menus()
+        self.init_default_menus()
         self.statusBar().showMessage('Ready')
         LOG.info(f'Settings path: {self.settings().fileName()}')
 
-    def init_menus(self):
+    def init_default_menus(self):
         exit_action_icon = self.style().standardIcon(QStyle.StandardPixmap.SP_DialogCloseButton)
         exit_action = QAction(exit_action_icon, 'E&xit', self)
         exit_action.triggered.connect(self.close)
@@ -53,6 +52,9 @@ class RbeesoftMainWindow(QMainWindow):
         self.save_geometry_and_state()
 
     # HELPERS
+
+    def add_page(self, page, home_page=False):
+        self._central_dockwidget.add_page(page, home_page)
 
     def load_geometry_and_state(self):
         geometry = self.settings().get('mainwindow/geometry')
