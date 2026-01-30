@@ -36,7 +36,7 @@ class RbeesoftMainWindow(QMainWindow):
         LOG.info(f'Settings path: {self.settings().fileName()}')
 
     def init_menus(self):
-        exit_action_icon = icon = self.style().standardIcon(QStyle.StandardPixmap.SP_DialogCloseButton)
+        exit_action_icon = self.style().standardIcon(QStyle.StandardPixmap.SP_DialogCloseButton)
         exit_action = QAction(exit_action_icon, 'E&xit', self)
         exit_action.triggered.connect(self.close)
         application_menu = self.menuBar().addMenu('Application')
