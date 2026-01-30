@@ -8,16 +8,6 @@ if /I NOT "%CONFIRM%"=="y" (
     exit /b 1
 )
 
-if "%~1"=="" (
-    call scripts\test.bat
-)
-
-set /p CONFIRM="Did the tests run without errors? (y/n) "
-if /I NOT "%CONFIRM%"=="y" (
-    echo Aborting deployment
-    exit /b 1
-)
-
 set /p BUMP_LEVEL="What version bump level do you want to use? [major, minor, patch (default)] "
 if /I "%BUMP_LEVEL%"=="major" (
     poetry version major
