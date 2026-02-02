@@ -121,9 +121,9 @@ class RbeesoftMainWindow(QMainWindow):
                 LOG.info('License OK')
                 return True
             except LicenseException as e:
-                LOG.error(e)
+                LOG.info(e)
                 return False
-        LOG.warning('No license found')
+        LOG.info('No license found')
         return False
 
     def load_geometry_and_state(self):

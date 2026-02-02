@@ -28,6 +28,8 @@ class LicenseManager:
     def verify(self, file_path):
         if isinstance(file_path, str):
             file_path = Path(file_path)
+        if not file_path.exists():
+            raise LicenseException('No license found')
         try:
             signed = json.loads(file_path.read_text(encoding='utf-8'))
             payload = signed['payload']
