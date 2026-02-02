@@ -3,11 +3,11 @@ from PySide6.QtCore import Qt, QByteArray
 from PySide6.QtWidgets import QMainWindow, QStyle, QFileDialog
 from PySide6.QtGui import QGuiApplication, QAction
 from rbeesoft.app.ui.settings import Settings
-from rbeesoft.app.ui.widgets.centraldockwidget import CentralDockWidget
-from rbeesoft.app.ui.widgets.logdockwidget import LogDockWidget
-from rbeesoft.common.licensemanager import LicenseManager
-from rbeesoft.common.licenseexception import LicenseException
-from rbeesoft.common.logmanager import LogManager
+from rbeesoft.app.ui.widgets import CentralDockWidget
+from rbeesoft.app.ui.widgets import LogDockWidget
+from rbeesoft.common import LicenseManager
+from rbeesoft.common.exceptions import LicenseException
+from rbeesoft.common import LogManager
 
 LOG = LogManager()
 

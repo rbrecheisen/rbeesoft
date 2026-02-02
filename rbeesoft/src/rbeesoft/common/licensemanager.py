@@ -3,7 +3,7 @@ import time
 import base64
 from pathlib import Path
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PublicKey
-from rbeesoft.common.licenseexception import LicenseException
+from rbeesoft.common.exceptions.licenseexception import LicenseException
 
 
 class LicenseManager:
