@@ -55,15 +55,16 @@ def main():
     parser.add_argument('output_dir', help='Path to output directory where license.json is written')
     parser.add_argument('product', help='Name of product')
     parser.add_argument('expires_days_from_now', help='Number of days to expire', type=int)
+    parser.add_argument('--features', help='Feature list', default='')
     args = parser.parse_args()
     priv_path = Path(args.private_key_path) # Path.home() / 'keys/ed25519_private.key'
-    out_path = Path(args.output_dir) # 'license.json'
+    out_path = Path(args.output_dir) / 'license.json'
     priv = load_private_key(priv_path)
     payload = make_license_payload(
         customer='Default customer',
         product=args.product,
         expires_days_from_now=args.expires_days_from_now,
-        features=[],
+        features=[x.strip() for x in args.features.split(',')],
         machine_fp=None,  # set to a fingerprint to bind to a device
     )
     signed = sign_license(payload, priv)
