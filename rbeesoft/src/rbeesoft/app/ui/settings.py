@@ -12,6 +12,12 @@ class Settings(QSettings):
         self._bundle_identifier = bundle_identifier
         self._app_name = app_name
 
+    def bundle_identifier(self):
+        return self._bundle_identifier
+    
+    def app_name(self):
+        return self._app_name
+
     def _prepend_bundle_identifier_and_name(self, name):
         return '{}.{}.{}'.format(self._bundle_identifier, self._app_name, name)
 

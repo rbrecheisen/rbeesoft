@@ -12,8 +12,8 @@ class MainWindow(RbeesoftMainWindow):
             bundle_identifier='rbeesoft.nl',
             app_name='example',
             app_title='Rbeesoft App Example',
-            width=800,
-            height=600,
+            app_width=800,
+            app_height=600,
             app_icon=app_icon,
         )
         self.add_page(HomePage(self.settings()), home_page=True)

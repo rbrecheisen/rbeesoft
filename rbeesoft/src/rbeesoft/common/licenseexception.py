@@ -1,0 +1,2 @@
+class LicenseException(Exception):
+    pass
