@@ -1,3 +1,7 @@
+2.0.10
+======
+- Page no longer taking license object in constructor
+
 2.0.9
 =====
 - Made some methods in RbeesoftMainWindow "private"
