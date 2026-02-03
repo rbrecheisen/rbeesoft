@@ -2,7 +2,7 @@ import os
 import atexit
 import datetime
 from pathlib import Path
-from rbeesoft.common.singleton import singleton
+from rbeesoft.common.decorators import singleton
 
 
 @singleton

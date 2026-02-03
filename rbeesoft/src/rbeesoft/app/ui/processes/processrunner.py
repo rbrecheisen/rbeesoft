@@ -1,4 +1,4 @@
-from rbeesoft.common.singleton import singleton
+from rbeesoft.common.decorators import singleton
 from rbeesoft.common.logmanager import LogManager
 
 LOG = LogManager()

@@ -3,19 +3,26 @@ import time
 import base64
 from pathlib import Path
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PublicKey
-from rbeesoft.common.exceptions.licenseexception import LicenseException
+from rbeesoft.common.exceptions import LicenseException
+from rbeesoft.common.license import License
+from rbeesoft.common.decorators import singleton
 
 
+@singleton
 class LicenseManager:
-    def __init__(self, public_key):
+    def __init__(self, settings):
         self._file_path = None
-        self._public_key = public_key
+        self._public_key = settings.get('public_key', None)
+        self._license = None
 
     def file_path(self):
         return self._file_path
     
     def public_key(self):
         return self._public_key
+    
+    def license(self):
+        return self._license
 
     def canonical_json_bytes(self, obj: dict) -> bytes:
         return json.dumps(
@@ -25,7 +32,7 @@ class LicenseManager:
             ensure_ascii=False
         ).encode("utf-8")
 
-    def verify(self, file_path):
+    def check_license(self, file_path):
         if isinstance(file_path, str):
             file_path = Path(file_path)
         if not file_path.exists():
@@ -44,6 +51,7 @@ class LicenseManager:
             exp = int(payload["exp"])
             if now > exp:
                 raise LicenseException('License expired')
-            return payload
+            self._license = License(payload)
+            return self._license
         except Exception as e:
             raise LicenseException(f'Invalid license: {e}')

@@ -4,6 +4,7 @@ from rbeesoft.app.ui import RbeesoftMainWindow
 from rbeesoft.app.ui.widgets.pages import Page
 from rbeesoft.app.ui.processes import Process
 from rbeesoft.app.ui.processes import ProcessRunner
+from rbeesoft.common import LicenseManager
 
 
 class MainWindow(RbeesoftMainWindow):
@@ -32,7 +33,10 @@ class HomePage(Page):
         layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignTop)
         layout.addWidget(QtWidgets.QLabel(self.title()))
         layout.addWidget(button)
-        layout.addWidget(process_button)
+        manager = LicenseManager(settings)
+        license = manager.license()
+        if license.has_all_features('x'):
+            layout.addWidget(process_button)
         self.setLayout(layout)
 
     def handle_button(self):

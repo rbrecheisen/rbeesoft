@@ -87,7 +87,7 @@ class RbeesoftMainWindow(QMainWindow):
     
     def license_manager(self):
         if not self._license_manager:
-            self._license_manager = LicenseManager(self.settings().get('public_key', None))
+            self._license_manager = LicenseManager(self.settings())
         return self._license_manager
     
     def license(self):
@@ -116,7 +116,7 @@ class RbeesoftMainWindow(QMainWindow):
         file_path = self.settings().get('mainwindow/license_file', None)
         if file_path:
             try:
-                self._license = self.license_manager().verify(file_path)
+                self._license = self.license_manager().check_license(file_path)
                 LOG.info(f'License found at {file_path}')
                 LOG.info('License OK')
                 return True
