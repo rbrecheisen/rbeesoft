@@ -27,23 +27,23 @@ class RbeesoftMainWindow(QMainWindow):
         self._log_dockwidget = None
         self._license_manager = None
         self._license = None
-        self.init()
+        self._init()
 
     # INITIALIZATION
 
-    def init(self):
+    def _init(self):
         self.setWindowTitle(self.app_title())
         self.addDockWidget(Qt.DockWidgetArea.TopDockWidgetArea, self.central_dockwidget())
         self.addDockWidget(Qt.DockWidgetArea.BottomDockWidgetArea, self.log_dockwidget())
         LOG.info(f'Settings path: {self.settings().fileName()}')
         if self.app_icon():
             self.setWindowIcon(self.app_icon())
-        self.load_geometry_and_state()
-        self.init_default_menus()
-        self.check_license()
+        self._load_geometry_and_state()
+        self._init_default_menus()
+        self._check_license()
         self.statusBar().showMessage('Ready')
 
-    def init_default_menus(self):
+    def _init_default_menus(self):
         # Application menu
         icon = self.style().standardIcon(QStyle.StandardPixmap.SP_MessageBoxCritical)
         exit_action = QAction(icon, 'E&xit', self)
@@ -96,7 +96,7 @@ class RbeesoftMainWindow(QMainWindow):
     # EVENT HANDLERS
 
     def closeEvent(self, event):
-        self.save_geometry_and_state()
+        self._save_geometry_and_state()
         return super().closeEvent(event)
 
     def handle_open_license_file_action(self):
@@ -105,14 +105,14 @@ class RbeesoftMainWindow(QMainWindow):
         if file_path:
             self.settings().set('mainwindow/last_directory', os.path.split(file_path)[0])
             self.settings().set('mainwindow/license_file', file_path)
-            self.check_license()
+            self._check_license()
 
     # HELPERS
 
     def add_page(self, page, home_page=False):
         self.central_dockwidget().add_page(page, home_page)
 
-    def check_license(self):
+    def _check_license(self):
         file_path = self.settings().get('mainwindow/license_file', None)
         if file_path:
             try:
@@ -126,7 +126,7 @@ class RbeesoftMainWindow(QMainWindow):
         LOG.info('No license found')
         return False
 
-    def load_geometry_and_state(self):
+    def _load_geometry_and_state(self):
         geometry = self.settings().get('mainwindow/geometry')
         state = self.settings().get('mainwindow/state')
         if isinstance(geometry, QByteArray) and self.restoreGeometry(geometry):
@@ -134,13 +134,13 @@ class RbeesoftMainWindow(QMainWindow):
                 self.restoreState(state)
             return
         self.resize(self.app_width(), self.app_height())
-        self.center_window()        
+        self._center_window()        
 
-    def save_geometry_and_state(self):
+    def _save_geometry_and_state(self):
         self.settings().set('mainwindow/geometry', self.saveGeometry())
         self.settings().set('mainwindow/state', self.saveState())
 
-    def center_window(self):
+    def _center_window(self):
         screen = QGuiApplication.primaryScreen().geometry()
         x = (screen.width() - self.geometry().width()) / 2
         y = (screen.height() - self.geometry().height()) / 2
