@@ -35,7 +35,7 @@ class HomePage(Page):
         layout.addWidget(button)
         manager = LicenseManager(settings)
         license = manager.license()
-        if license.has_all_features('x'):
+        if license.has_all_features():
             layout.addWidget(process_button)
         self.setLayout(layout)
 

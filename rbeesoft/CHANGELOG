@@ -1,3 +1,7 @@
+2.0.8
+=====
+- Fixed some bugs
+
 2.0.7
 =====
 - Updated license handling (license object allows feature check)
