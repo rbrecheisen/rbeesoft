@@ -1,3 +1,7 @@
+2.0.7
+=====
+- Updated license handling (license object allows feature check)
+
 2.0.6
 =====
 - Python classes easier imports
