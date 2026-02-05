@@ -6,6 +6,8 @@ from rbeesoft.app.ui.processes import Process
 from rbeesoft.app.ui.processes import ProcessRunner
 from rbeesoft.common import LicenseManager
 
+MAJOR_VERSION = 1.0
+
 
 class MainWindow(RbeesoftMainWindow):
     def __init__(self, app_icon):
@@ -13,6 +15,7 @@ class MainWindow(RbeesoftMainWindow):
             bundle_identifier='rbeesoft.nl',
             app_name='example',
             app_title='Rbeesoft App Example',
+            app_major_version=MAJOR_VERSION,
             app_width=800,
             app_height=600,
             app_icon=app_icon,
@@ -35,7 +38,7 @@ class HomePage(Page):
         layout.addWidget(button)
         manager = LicenseManager(settings)
         license = manager.license()
-        if license.has_all_features():
+        if license and license.has_all_features():
             layout.addWidget(process_button)
         self.setLayout(layout)
 

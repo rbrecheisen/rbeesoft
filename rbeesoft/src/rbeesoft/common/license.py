@@ -17,6 +17,9 @@ class License:
     def expiry_days(self):
         return int(self._payload['exp'])
     
+    def major_version(self):
+        return float(self._payload['major_version'])
+    
     def id(self):
         return self._payload['license_id']
     
@@ -27,9 +30,6 @@ class License:
         if now > self.expiry_days():
             return True
         return False
-    
-    def is_valid(self):
-        return not self.is_expired()
     
     def has_all_features(self):
         return 'all' in self.feature_list()

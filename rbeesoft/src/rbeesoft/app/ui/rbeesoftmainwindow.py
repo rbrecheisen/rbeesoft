@@ -15,11 +15,13 @@ PUBLIC_KEY_B64 = 'C7yBmGtvBkvnvGtWiey4PKXZWo7Lza61+FwV2UyAu34='
 
 
 class RbeesoftMainWindow(QMainWindow):
-    def __init__(self, bundle_identifier, app_name, app_title, app_width=1024, app_height=1024, app_icon=None):
+    def __init__(self, bundle_identifier, app_name, app_title, app_major_version, app_width=1024, app_height=1024, app_icon=None):
         super(RbeesoftMainWindow, self).__init__()
         self._settings = Settings(bundle_identifier, app_name)
         self._settings.set('public_key', PUBLIC_KEY_B64)
+        self._settings.set('major_version', app_major_version)
         self._app_title = app_title
+        self._app_major_version = app_major_version
         self._app_width = app_width
         self._app_height = app_height
         self._app_icon = app_icon
@@ -32,7 +34,7 @@ class RbeesoftMainWindow(QMainWindow):
     # INITIALIZATION
 
     def _init(self):
-        self.setWindowTitle(self.app_title())
+        self.setWindowTitle(self.app_title() + f' ({self.app_major_version()})')
         self.addDockWidget(Qt.DockWidgetArea.TopDockWidgetArea, self.central_dockwidget())
         self.addDockWidget(Qt.DockWidgetArea.BottomDockWidgetArea, self.log_dockwidget())
         LOG.info(f'Settings path: {self.settings().fileName()}')
@@ -64,6 +66,9 @@ class RbeesoftMainWindow(QMainWindow):
     
     def app_title(self):
         return self._app_title
+    
+    def app_major_version(self):
+        return self._app_major_version
     
     def app_width(self):
         return self._app_width

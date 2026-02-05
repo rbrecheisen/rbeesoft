@@ -14,15 +14,18 @@ def canonical_json_bytes(obj: dict) -> bytes:
         ensure_ascii=False
     ).encode("utf-8")
 
+
 def load_private_key(path: Path) -> Ed25519PrivateKey:
     key_bytes = path.read_bytes()
     return Ed25519PrivateKey.from_private_bytes(key_bytes)
+
 
 def make_license_payload(
     customer: str,
     product: str,
     expires_days_from_now: int,
     features: list[str],
+    major_version: str,
     machine_fp: str | None = None,
 ) -> dict:
     now = int(time.time())
@@ -33,12 +36,14 @@ def make_license_payload(
         "features": features,
         "issued_at": now,
         "exp": exp,
+        "major_version": major_version,
         "license_id": f"LIC-{now}",
     }
     # Optional machine binding (keep None for portable)
     if machine_fp:
         payload["machine_fp"] = machine_fp
     return payload
+
 
 def sign_license(payload: dict, priv: Ed25519PrivateKey) -> dict:
     msg = canonical_json_bytes(payload)
@@ -49,28 +54,33 @@ def sign_license(payload: dict, priv: Ed25519PrivateKey) -> dict:
         "alg": "Ed25519",
     }
 
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('private_key_path', help='Path to private key file')
     parser.add_argument('output_dir', help='Path to output directory where license.json is written')
-    parser.add_argument('product', help='Name of product')
+    parser.add_argument('product', help='Name of product (lowercase)')
     parser.add_argument('expires_days_from_now', help='Number of days to expire', type=int)
-    parser.add_argument('--features', help='Feature list', default='')
+    parser.add_argument('major_version', help='Major version for which this license is valid', type=float)
+    parser.add_argument('features', help='Feature list (use "all" for all features)')
     args = parser.parse_args()
+    print(args)
     priv_path = Path(args.private_key_path) # Path.home() / 'keys/ed25519_private.key'
-    out_path = Path(args.output_dir) / 'license.json'
+    out_path = Path(args.output_dir) / f'license-v{args.major_version}.json'
     priv = load_private_key(priv_path)
     payload = make_license_payload(
         customer='Default customer',
         product=args.product,
         expires_days_from_now=args.expires_days_from_now,
         features=[x.strip() for x in args.features.split(',')],
+        major_version=args.major_version,
         machine_fp=None,  # set to a fingerprint to bind to a device
     )
     signed = sign_license(payload, priv)
     out_path.write_text(json.dumps(signed, indent=2, ensure_ascii=False), encoding="utf-8")
     print(f"Wrote signed license to: {out_path.resolve()}")
     print(f"Expires at (unix): {payload['exp']}")
+
 
 if __name__ == "__main__":
     main()
