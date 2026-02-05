@@ -130,8 +130,10 @@ class RbeesoftMainWindow(QMainWindow):
                 return True
             except LicenseException as e:
                 LOG.info(e)
+                self.license_changed(file_path)
                 return False
         LOG.info('No license found')
+        self.license_changed(file_path)
         return False
 
     def _load_geometry_and_state(self):
