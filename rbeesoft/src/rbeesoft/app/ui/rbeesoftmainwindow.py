@@ -1,5 +1,5 @@
 import os
-from PySide6.QtCore import Qt, QByteArray
+from PySide6.QtCore import Qt, QByteArray, Signal
 from PySide6.QtWidgets import QMainWindow, QStyle, QFileDialog
 from PySide6.QtGui import QGuiApplication, QAction
 from rbeesoft.app.ui.settings import Settings
@@ -15,6 +15,8 @@ PUBLIC_KEY_B64 = 'C7yBmGtvBkvnvGtWiey4PKXZWo7Lza61+FwV2UyAu34='
 
 
 class RbeesoftMainWindow(QMainWindow):
+    license_changed = Signal(str)
+
     def __init__(self, bundle_identifier, app_name, app_title, app_major_version, app_width=1024, app_height=1024, app_icon=None):
         super(RbeesoftMainWindow, self).__init__()
         self._settings = Settings(bundle_identifier, app_name)
@@ -124,6 +126,7 @@ class RbeesoftMainWindow(QMainWindow):
                 self._license = self.license_manager().check_license(file_path)
                 LOG.info(f'License found at {file_path}')
                 LOG.info('License OK')
+                self.license_changed(file_path)
                 return True
             except LicenseException as e:
                 LOG.info(e)
@@ -150,3 +153,6 @@ class RbeesoftMainWindow(QMainWindow):
         x = (screen.width() - self.geometry().width()) / 2
         y = (screen.height() - self.geometry().height()) / 2
         self.move(int(x), int(y))
+
+    def license_changed(self, file_path):
+        pass
