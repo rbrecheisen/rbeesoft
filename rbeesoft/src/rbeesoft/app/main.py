@@ -19,6 +19,7 @@ class MainWindow(RbeesoftMainWindow):
             app_width=800,
             app_height=600,
             app_icon=app_icon,
+            requires_license=False,
         )
         self.add_page(HomePage(self.settings()), home_page=True)
         self.add_page(NextPage(self.settings()))

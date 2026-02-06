@@ -17,7 +17,7 @@ PUBLIC_KEY_B64 = 'C7yBmGtvBkvnvGtWiey4PKXZWo7Lza61+FwV2UyAu34='
 class RbeesoftMainWindow(QMainWindow):
     license_changed = Signal(str)
 
-    def __init__(self, bundle_identifier, app_name, app_title, app_major_version, app_width=1024, app_height=1024, app_icon=None):
+    def __init__(self, bundle_identifier, app_name, app_title, app_major_version, app_width, app_height, app_icon, requires_license=False):
         super(RbeesoftMainWindow, self).__init__()
         self._settings = Settings(bundle_identifier, app_name)
         self._settings.set('public_key', PUBLIC_KEY_B64)
@@ -27,6 +27,9 @@ class RbeesoftMainWindow(QMainWindow):
         self._app_width = app_width
         self._app_height = app_height
         self._app_icon = app_icon
+        self._requires_license = requires_license
+        self._application_menu = None
+        self._settings_menu = None
         self._central_dockwidget = None
         self._log_dockwidget = None
         self._license_manager = None
@@ -44,23 +47,25 @@ class RbeesoftMainWindow(QMainWindow):
             self.setWindowIcon(self.app_icon())
         self._load_geometry_and_state()
         self._init_default_menus()
-        self._check_license()
+        if self._requires_license:
+            self._check_license()
         self.statusBar().showMessage('Ready')
 
     def _init_default_menus(self):
         # Application menu
+        self._application_menu = self.menuBar().addMenu('Application')
         icon = self.style().standardIcon(QStyle.StandardPixmap.SP_MessageBoxCritical)
         exit_action = QAction(icon, 'E&xit', self)
         exit_action.triggered.connect(self.close)
-        application_menu = self.menuBar().addMenu('Application')
-        application_menu.addAction(exit_action)
+        self._application_menu.addAction(exit_action)
         # Settings menu
-        icon = self.style().standardIcon(QStyle.StandardPixmap.SP_VistaShield)
-        open_license_file_action = QAction(icon, 'Open license file...', self)
-        open_license_file_action.triggered.connect(self.handle_open_license_file_action)
-        settings_menu = self.menuBar().addMenu('Settings')
-        settings_menu.addAction(open_license_file_action)
-
+        self._settings_menu = self.menuBar().addMenu('Settings')
+        if self._requires_license:
+            icon = self.style().standardIcon(QStyle.StandardPixmap.SP_VistaShield)
+            open_license_file_action = QAction(icon, 'Open license file...', self)
+            open_license_file_action.triggered.connect(self.handle_open_license_file_action)
+            self._settings_menu.addAction(open_license_file_action)
+    
     # GETTERS
 
     def settings(self):
@@ -91,6 +96,12 @@ class RbeesoftMainWindow(QMainWindow):
             self._log_dockwidget = LogDockWidget(self)
             LOG.add_listener(self._log_dockwidget)
         return self._log_dockwidget
+    
+    def application_menu(self):
+        return self._application_menu
+    
+    def settings_menu(self):
+        return self._settings_menu
     
     def license_manager(self):
         if not self._license_manager:
@@ -126,14 +137,12 @@ class RbeesoftMainWindow(QMainWindow):
                 self._license = self.license_manager().check_license(file_path)
                 LOG.info(f'License found at {file_path}')
                 LOG.info('License OK')
-                self.license_changed(file_path)
+                LOG.info('(You may have to restart the tool to see extended functionality)')
                 return True
             except LicenseException as e:
                 LOG.info(e)
-                self.license_changed(file_path)
                 return False
         LOG.info('No license found')
-        self.license_changed(file_path)
         return False
 
     def _load_geometry_and_state(self):
@@ -155,6 +164,3 @@ class RbeesoftMainWindow(QMainWindow):
         x = (screen.width() - self.geometry().width()) / 2
         y = (screen.height() - self.geometry().height()) / 2
         self.move(int(x), int(y))
-
-    def license_changed(self, file_path):
-        pass

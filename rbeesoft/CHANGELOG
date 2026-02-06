@@ -1,3 +1,15 @@
+2.0.16
+======
+- Added "requires_license" option to RbeesoftMainWindow
+
+2.0.15
+======
+- Fixed focus issue in LogDockWidget
+
+2.0.14
+======
+- Small bug fixes
+
 2.0.13
 ======
 - Fixed bug in license change notification

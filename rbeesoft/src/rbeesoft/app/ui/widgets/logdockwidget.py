@@ -1,3 +1,4 @@
+from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
     QWidget,
     QDockWidget,
@@ -24,6 +25,7 @@ class LogDockWidget(QDockWidget, LogManagerListener):
     def text_edit(self):
         if not self._text_edit:
             self._text_edit = QTextEdit()
+            self._text_edit.setFocusPolicy(Qt.FocusPolicy.NoFocus)
         return self._text_edit
     
     def init_layout(self):
