@@ -41,9 +41,12 @@ class CentralDockWidget(QDockWidget):
     def add_page(self, page, home_page=False):
         page.page_changed.connect(self.handle_page_changed)
         self.page_router().add_page(page, home_page)
+        if home_page:
+            self.setWindowTitle(page.title())
 
     def switch_to_page(self, name):
         self.page_router().switch_to_page(name)
+        self.setWindowTitle(self.page_router().page(name).title())
 
     # EVENT HANDLERS
 

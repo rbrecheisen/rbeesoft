@@ -30,7 +30,10 @@ class PageRouter(QStackedWidget):
         if page.name() not in self.pages().keys():
             self.pages()[page.name()] = page
             if home_page:
-                self._home_page = page
+                if self._home_page is None:
+                    self._home_page = page
+                else:
+                    raise Exception(f'Home page already set ({self._home_page.name()})')
             self.addWidget(page)
     
     def switch_to_page(self, name):

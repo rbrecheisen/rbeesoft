@@ -130,6 +130,9 @@ class RbeesoftMainWindow(QMainWindow):
     def add_page(self, page, home_page=False):
         self.central_dockwidget().add_page(page, home_page)
 
+    def switch_to_page(self, name):
+        self.central_dockwidget().switch_to_page(name)
+
     def _check_license(self):
         file_path = self.settings().get('mainwindow/license_file', None)
         if file_path:

@@ -1,3 +1,20 @@
+2.0.20
+======
+- Fixed bug setting home page
+
+2.0.19
+======
+- Fixed bug setting window title CentralDockWidget
+- Added check only single home page allowed
+
+2.0.18
+======
+- Pages set window title of CentralDockWidget
+
+2.0.17
+======
+- Switching pages can be done from RbeesoftMainWindow
+
 2.0.16
 ======
 - Added "requires_license" option to RbeesoftMainWindow
