@@ -1,9 +1,14 @@
 import os
 import sys
+from webapp.rbeesoftwebappsettings import RbeesoftWebAppSettings
 
 
 class RbeesoftWebApp:
     def __init__(self):
+        self._settings = RbeesoftWebAppSettings('webapp/settings.py')
+        print(self._settings)
+
+    def add_setting(self):
         pass
 
     def run(self):
