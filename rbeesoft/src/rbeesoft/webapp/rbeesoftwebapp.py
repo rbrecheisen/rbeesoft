@@ -1,6 +1,7 @@
 import os
 import sys
 import ast
+import json
 from pathlib import Path
 from typing import Dict, Union
 
@@ -8,6 +9,9 @@ from typing import Dict, Union
 class Settings:
     def __init__(self, settings_path):
         self._settings = self.settings_py_to_string_dict(settings_path)
+
+    def print(self):
+        print(json.dumps(self._settings, indent=4))
 
     def settings_py_to_string_dict(
         self,
@@ -81,7 +85,7 @@ class Settings:
 class RbeesoftWebApp:
     def __init__(self):
         self._settings = Settings('webapp/settings.py')
-        print(self._settings)
+        self._settings.print()
 
     def add_setting(self):
         pass
