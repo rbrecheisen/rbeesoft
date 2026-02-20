@@ -8,20 +8,37 @@ from PySide6.QtCore import (
 
 
 class Process(QObject):
-    progress = Signal(int)
+    progress = Signal(int, int)
     finished = Signal(object)
     failed = Signal(Exception)
     started = Signal()
     canceled = Signal()
 
-    def __init__(self, parent=None):
-        super().__init__(parent)
+    def __init__(self, inputs, output, params=None, parent=None):
+        super(Process, self).__init__(parent)
+        self._inputs = inputs
+        self._output = output
+        self._params = params
         self._cancel = False
         self._thread = None
         self._main_thread = None
 
-    def name(self):
-        return self._name
+    # GETTERS
+
+    def inputs(self):
+        return self._inputs
+
+    def input(self, name):
+        return self._inputs[name]
+    
+    def output(self):
+        return self._output
+    
+    def params(self):
+        return self._params
+    
+    def param(self, name):
+        return self._params[name]
 
     def cancel(self):
         self._cancel = True

@@ -30,6 +30,7 @@ class RbeesoftMainWindow(QMainWindow):
         self._requires_license = requires_license
         self._application_menu = None
         self._settings_menu = None
+        self._views_menu = None
         self._central_dockwidget = None
         self._log_dockwidget = None
         self._license_manager = None
@@ -65,6 +66,11 @@ class RbeesoftMainWindow(QMainWindow):
             open_license_file_action = QAction(icon, 'Open license file...', self)
             open_license_file_action.triggered.connect(self.handle_open_license_file_action)
             self._settings_menu.addAction(open_license_file_action)
+        # Views
+        self._views_menu = self.menuBar().addMenu('Views')
+        view_log_action = self.log_dockwidget().toggleViewAction()
+        view_log_action.setText('Log')
+        self._views_menu.addAction(view_log_action)
     
     # GETTERS
 
@@ -102,6 +108,9 @@ class RbeesoftMainWindow(QMainWindow):
     
     def settings_menu(self):
         return self._settings_menu
+    
+    def views_menu(self):
+        return self._views_menu
     
     def license_manager(self):
         if not self._license_manager:

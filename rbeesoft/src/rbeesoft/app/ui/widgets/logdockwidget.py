@@ -37,6 +37,11 @@ class LogDockWidget(QDockWidget, LogManagerListener):
         container = QWidget()
         container.setLayout(layout)
         self.setObjectName('logdockwidget') # Needed for save geometry/state
+        self.setAllowedAreas(Qt.DockWidgetArea.BottomDockWidgetArea)
+        self.setFeatures(QDockWidget.DockWidgetClosable | 
+                         QDockWidget.DockWidgetMovable | 
+                         QDockWidget.DockWidgetFloatable
+                         )
         self.setWindowTitle(self.title_label().text())
         self.setWidget(container)
 
