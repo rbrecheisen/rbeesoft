@@ -139,6 +139,9 @@ class RbeesoftMainWindow(QMainWindow):
     def add_page(self, page, home_page=False):
         self.central_dockwidget().add_page(page, home_page)
 
+    def page(self, name):
+        return self.central_dockwidget().page(name)
+
     def switch_to_page(self, name):
         self.central_dockwidget().switch_to_page(name)
 

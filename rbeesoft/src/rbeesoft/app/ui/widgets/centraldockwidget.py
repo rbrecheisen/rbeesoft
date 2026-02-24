@@ -44,6 +44,9 @@ class CentralDockWidget(QDockWidget):
         if home_page:
             self.setWindowTitle(page.title())
 
+    def page(self, name):
+        return self.page_router().page(name)
+
     def switch_to_page(self, name):
         self.page_router().switch_to_page(name)
         self.setWindowTitle(self.page_router().page(name).title())
