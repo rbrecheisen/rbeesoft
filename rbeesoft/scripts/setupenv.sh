@@ -9,4 +9,9 @@ mamba install -c conda-forge \
     django-session-security \
     django-guardian \
     django-crispy-forms \
-    crispy-bootstrap5
+    crispy-bootstrap5 \
+    pendulum
+
+poetry config virtualenvs.create false --local
+poetry lock
+poetry install
